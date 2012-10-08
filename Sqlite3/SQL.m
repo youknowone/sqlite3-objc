@@ -19,6 +19,12 @@
 
 #import "SQL.h"
 
+#if __LP64__ || (TARGET_OS_EMBEDDED && !TARGET_OS_IPHONE) || TARGET_OS_WIN32 || NS_BUILD_32_LIKE_64
+    #define NSUIntegerFormat "%lu"
+#else
+    #define NSUIntegerFormat "%u"
+#endif
+
 @implementation SLSQL
 @synthesize SQL=_SQL;
 
@@ -76,12 +82,12 @@
 }
 
 - (SLSQL *)limit:(NSUInteger)count {
-	[_SQL appendFormat:@" LIMIT %lu", count];
+	[_SQL appendFormat:@" LIMIT "NSUIntegerFormat, count];
 	return self;
 }
 
 - (SLSQL *)limit:(NSUInteger)from count:(NSUInteger)count {
-	[_SQL appendFormat:@" LIMIT %lu,%lu", from, count];
+	[_SQL appendFormat:@" LIMIT "NSUIntegerFormat","NSUIntegerFormat, from, count];
 	return self;
 }
 

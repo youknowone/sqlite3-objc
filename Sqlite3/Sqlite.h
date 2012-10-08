@@ -29,7 +29,7 @@
 @class SLCursor;
 @interface SLDatabase : NSObject {
 	int _resultCode;
-	char *_errorMessage;
+	const char *_errorMessage;
 @public
 	sqlite3 *_sqlite3;
 }
@@ -39,7 +39,10 @@
 @property(nonatomic, readonly) sqlite3 *sqlite3;
 
 - (id)initWithMemory;
-- (id)initWithFile:(NSString*)filename;
+- (id)initWithFilename:(NSString*)filename;
+
++ (id)databaseWithMemory;
++ (id)databaseWithFilename:(NSString*)filename;
 
 - (void)openMemory;
 - (void)openFile:(NSString *)filename;
@@ -80,7 +83,7 @@
 
 - (NSString *)nameAtColumnIndex:(NSInteger)index;
 - (NSString *)stringValueAtColumnIndex:(NSInteger)index;
-- (NSUInteger)integerValueAtColumnIndex:(NSInteger)index;
+- (NSInteger)integerValueAtColumnIndex:(NSInteger)index;
 
 @end
 

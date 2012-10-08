@@ -18,7 +18,7 @@
  */
 
 #define SQLITE3_DEBUG FALSE
-#import "Sqlite3.h"
+#import "Sqlite.h"
 #import "SQL.h"
 
 #import "debug.h"
@@ -28,7 +28,8 @@
 @synthesize resultCode=_resultCode;
 
 - (id)initWithDatabase:(SLDatabase *)database sql:(NSString *)sql errorMessage:(const char **)bufferOrNull {
-	if ((self = [self init]) != nil) {
+    self = [super init];
+	if (self != nil) {
 		self->_resultCode = sqlite3_prepare_v2(database.sqlite3, [sql UTF8String], -1, &self->_statement, bufferOrNull);
 		[self next];
 	}
@@ -73,7 +74,7 @@
 	return [NSString stringWithUTF8String:text];
 }
 
-- (NSUInteger)integerValueAtColumnIndex:(NSInteger)index {
+- (NSInteger)integerValueAtColumnIndex:(NSInteger)index {
 	return sqlite3_column_int(self->_statement, (int)index);
 }
 
@@ -117,10 +118,18 @@
 	return self;
 }
 
-- (id)initWithFile:(NSString*)filename {
+- (id)initWithFilename:(NSString*)filename {
 	self = [self init];
 	[self openFile:filename];
 	return self;
+}
+
++ (id)databaseWithMemory {
+    return [[[self alloc] initWithMemory] autorelease];
+}
+
++ (id)databaseWithFilename:(NSString *)filename {
+    return [[[self alloc] initWithFilename:filename] autorelease];
 }
 
 - (void)dealloc {
@@ -134,9 +143,10 @@
 	if (nil == self->_errorMessage) {
 		return nil;
 	}
+    if (0 == *self->_errorMessage) {
+        return nil;
+    }
 	NSString *msg = [[NSString alloc] initWithCString:self->_errorMessage encoding:NSASCIIStringEncoding];
-	sqlite3_free(self->_errorMessage);
-	self->_errorMessage = nil;
 	return [msg autorelease];
 }
 
@@ -163,16 +173,20 @@
 }
 
 - (void)executeQuery:(NSString*)sql {
+    if (self->_errorMessage && *self->_errorMessage) {
+		sqlite3_free((void *)self->_errorMessage);
+		self->_errorMessage = nil;
+	}
 	self->_resultCode = sqlite3_exec(self->_sqlite3, [sql UTF8String], NULL, NULL, &self->_errorMessage);
 }
 
 - (SLCursor*)cursorByQuery:(NSString*)sql {
 	dlog(SQLITE3_DEBUG, @"sql: %@", sql);
 	if (self->_errorMessage) {
-		//sqlite3_free(errorMessage);
+		sqlite3_free((void *)self->_errorMessage);
 		self->_errorMessage = nil;
 	}
-	SLCursor* cursor = [[SLCursor alloc] initWithDatabase:self sql:sql errorMessage:(const char**)&self->_errorMessage];
+	SLCursor* cursor = [[SLCursor alloc] initWithDatabase:self sql:sql errorMessage:&self->_errorMessage];
 	self->_resultCode = cursor.resultCode;
 	return [cursor autorelease];
 }
@@ -273,10 +287,7 @@
         }
     }
     
-    return [NSString stringWithFormat:@"INSERT INTO `%@` (%@) VALUES (%@)",
-            self.table,
-            keyString,
-            valueString];
+    return [NSString stringWithFormat:@"INSERT INTO `%@` (%@) VALUES (%@)", self.table, keyString, valueString];
 }
 
 - (NSString *)description {
