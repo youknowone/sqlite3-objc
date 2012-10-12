@@ -18,9 +18,9 @@
  */
 
 //
-//	In this file:
-//	Query is SQL statement as NSString type
-//	SQL is SQL statement as SLSQL type
+//    In this file:
+//    Query is SQL statement as NSString type
+//    SQL is SQL statement as SLSQL type
 
 #include <sqlite3.h>
 
@@ -28,10 +28,10 @@
 
 @class SLCursor;
 @interface SLDatabase : NSObject {
-	int _resultCode;
-	const char *_errorMessage;
+    int _resultCode;
+    const char *_errorMessage;
 @public
-	sqlite3 *_sqlite3;
+    sqlite3 *_sqlite3;
 }
 
 @property(nonatomic, readonly) int resultCode;
@@ -39,19 +39,19 @@
 @property(nonatomic, readonly) sqlite3 *sqlite3;
 
 - (id)initWithMemory;
-- (id)initWithFilename:(NSString*)filename;
+- (id)initWithFile:(NSString*)filename;
 
 + (id)databaseWithMemory;
-+ (id)databaseWithFilename:(NSString*)filename;
++ (id)databaseWithFile:(NSString*)filename;
 
-- (void)openMemory;
-- (void)openFile:(NSString *)filename;
-- (void)openFile:(NSString *)filename flags:(int)flags vfs:(const char *)zVfsOrNull;
+- (bool)openMemory;
+- (bool)openFile:(NSString *)filename;
+- (bool)openFile:(NSString *)filename flags:(int)flags vfs:(const char *)zVfsOrNull;
 - (void)close;
 
-- (void)executeQuery:(NSString *)sql;
-- (SLCursor*)cursorByQuery:(NSString *)sql;
-- (SLCursor*)cursorByFormat:(NSString*)format, ... NS_FORMAT_FUNCTION(1,2);
+- (bool)executeQuery:(NSString *)sql;
+- (SLCursor *)cursorByQuery:(NSString *)sql;
+- (SLCursor *)cursorByFormat:(NSString*)format, ... NS_FORMAT_FUNCTION(1,2);
 
 + (int)versionNumber;
 + (int)libraryVersionNumber;
@@ -67,8 +67,8 @@
 @end
 
 @interface SLCursor: NSObject {
-	int _resultCode;
-	sqlite3_stmt *_statement;
+    int _resultCode;
+    sqlite3_stmt *_statement;
 }
 
 @property(nonatomic, readonly) int resultCode;
@@ -76,7 +76,7 @@
 @property(nonatomic, readonly) NSInteger rowCount, columnCount;
 
 - (id)initWithDatabase:(SLDatabase *)database sql:(NSString *)sql errorMessage:(const char**)bufferOrNull;
-+ (SLCursor *)cursorWithSqlite3:(SLDatabase *)sqlite3 sql:(NSString *)sql errorMessage:(const char**)bufferOrNull;
++ (id)cursorWithSqlite3:(SLDatabase *)database sql:(NSString *)sql errorMessage:(const char**)bufferOrNull;
 
 - (void)reset;
 - (void)next;

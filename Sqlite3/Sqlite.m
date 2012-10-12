@@ -4,7 +4,7 @@
 //
 //  Created by youknowone on 09. 12. 9..
 //  Copyright 2010 youknowone.org All rights reserved.
-//	
+//    
 /*
  ** 2001 September 15
  **
@@ -29,74 +29,80 @@
 
 - (id)initWithDatabase:(SLDatabase *)database sql:(NSString *)sql errorMessage:(const char **)bufferOrNull {
     self = [super init];
-	if (self != nil) {
-		self->_resultCode = sqlite3_prepare_v2(database.sqlite3, [sql UTF8String], -1, &self->_statement, bufferOrNull);
-		[self next];
-	}
-	return self;
+    if (self != nil) {
+        self->_resultCode = sqlite3_prepare_v2(database.sqlite3, [sql UTF8String], -1, &self->_statement, bufferOrNull);
+        [self next];
+    }
+    return self;
 }
 
 + (SLCursor *)cursorWithSqlite3:(SLDatabase *)sqlite3 sql:(NSString *)sql errorMessage:(const char**)bufferOrNull {
-	return [[[self alloc] initWithDatabase:sqlite3 sql:sql errorMessage:bufferOrNull] autorelease];
+    return [[[self alloc] initWithDatabase:sqlite3 sql:sql errorMessage:bufferOrNull] autorelease];
 }
 
 - (void)dealloc {
-	if (nil != self->_statement) {
-		self->_resultCode = sqlite3_finalize(self->_statement);
-	}
-	[super dealloc];
+    if (nil != self->_statement) {
+        self->_resultCode = sqlite3_finalize(self->_statement);
+    }
+    [super dealloc];
 }
 
 - (void)reset {
-	self->_resultCode = sqlite3_reset(self->_statement);
-	[self next];
+    self->_resultCode = sqlite3_reset(self->_statement);
+    [self next];
 }
 
 - (void)next {
-	self->_resultCode = sqlite3_step(self->_statement);
+    self->_resultCode = sqlite3_step(self->_statement);
 }
 
 - (NSInteger)rowCount {
-	return (NSInteger)sqlite3_data_count(self->_statement);
+    return (NSInteger)sqlite3_data_count(self->_statement);
 }
 
 - (NSInteger)columnCount {
-	return (NSInteger)sqlite3_column_count(self->_statement);
+    return (NSInteger)sqlite3_column_count(self->_statement);
 }
 
 - (NSString *)nameAtColumnIndex:(NSInteger)index {
-	return [NSString stringWithUTF8String:sqlite3_column_name(self->_statement, (int)index)];
+    return [NSString stringWithUTF8String:sqlite3_column_name(self->_statement, (int)index)];
 }
 
 - (NSString *)stringValueAtColumnIndex:(NSInteger)index {
     const char *text = (const char*)sqlite3_column_text(self->_statement, (int)index);
     if (text == NULL) return nil;
-	return [NSString stringWithUTF8String:text];
+    return [NSString stringWithUTF8String:text];
 }
 
 - (NSInteger)integerValueAtColumnIndex:(NSInteger)index {
-	return sqlite3_column_int(self->_statement, (int)index);
+    return sqlite3_column_int(self->_statement, (int)index);
 }
 
 - (BOOL)isEndOfCursor {
-	return self->_resultCode == SQLITE_DONE;
+    return self->_resultCode == SQLITE_DONE;
 }
 
 /* deprecated set */
 - (NSString*) getColumnName:(NSInteger)column {
-	return [NSString stringWithUTF8String:sqlite3_column_name(self->_statement, (int)column)];
+    return [NSString stringWithUTF8String:sqlite3_column_name(self->_statement, (int)column)];
 }
 
 - (NSString*) getColumnAsString:(NSInteger)column {
-	return [NSString stringWithUTF8String:(const char*)sqlite3_column_text(self->_statement, (int)column)];
+    return [NSString stringWithUTF8String:(const char*)sqlite3_column_text(self->_statement, (int)column)];
 }
 
 - (NSUInteger)getColumnAsInteger:(NSInteger)column {
-	return sqlite3_column_int(self->_statement, (int)column);
+    return sqlite3_column_int(self->_statement, (int)column);
 }
 
 @end
 
+
+@interface SLDatabase ()
+
+- (void)_freeErrorMessage;
+
+@end
 
 @implementation SLDatabase
 
@@ -104,110 +110,128 @@
 
 - (id)init {
     self = [super init];
-	if (self != nil ) {
-		self->_sqlite3 = nil;
-		self->_resultCode = 0;
-		self->_errorMessage = nil;
-	}
-	return self;
+    if (self != nil ) {
+        self->_sqlite3 = nil;
+        self->_resultCode = 0;
+        self->_errorMessage = nil;
+    }
+    return self;
 }
 
 - (id)initWithMemory {
-	self = [self init];
-	[self openMemory];
-	return self;
+    self = [self init];
+    if (self != nil) {
+        bool success = [self openMemory];
+        if (!success) {
+            [self release];
+            return nil;
+        }
+    }
+    return self;
 }
 
-- (id)initWithFilename:(NSString*)filename {
-	self = [self init];
-	[self openFile:filename];
-	return self;
+- (id)initWithFile:(NSString*)filename {
+    self = [self init];
+    if (self != nil) {
+        bool success = [self openFile:filename];
+        if (!success) {
+            [self release];
+            return nil;
+        }
+    }
+    [self openFile:filename];
+    return self;
 }
 
 + (id)databaseWithMemory {
     return [[[self alloc] initWithMemory] autorelease];
 }
 
-+ (id)databaseWithFilename:(NSString *)filename {
-    return [[[self alloc] initWithFilename:filename] autorelease];
++ (id)databaseWithFile:(NSString *)filename {
+    return [[[self alloc] initWithFile:filename] autorelease];
 }
 
 - (void)dealloc {
-	if (nil != self->_sqlite3) {
-		[self close];
+    if (nil != self->_sqlite3) {
+        [self close];
     }
-	[super dealloc];
+    [super dealloc];
+}
+
+- (void)_freeErrorMessage {
+    if (self->_errorMessage && *self->_errorMessage) {
+        sqlite3_free((void *)self->_errorMessage);
+        self->_errorMessage = nil;
+    }
 }
 
 - (NSString *)errorMessage {
-	if (nil == self->_errorMessage) {
-		return nil;
-	}
+    if (nil == self->_errorMessage) {
+        return nil;
+    }
     if (0 == *self->_errorMessage) {
         return nil;
     }
-	NSString *msg = [[NSString alloc] initWithCString:self->_errorMessage encoding:NSASCIIStringEncoding];
-	return [msg autorelease];
+    NSString *msg = [[NSString alloc] initWithCString:self->_errorMessage encoding:NSASCIIStringEncoding];
+    return [msg autorelease];
 }
 
 #pragma mark -
 #pragma mark sqlite3 wrapping
 
-- (void)openMemory {
-	self->_resultCode = sqlite3_open_v2(":memory:", &self->_sqlite3, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL);
+- (bool)openMemory {
+    self->_resultCode = sqlite3_open_v2(":memory:", &self->_sqlite3, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL);
+    return self->_resultCode == SQLITE_OK;
 }
 
 // UTF-8
-- (void)openFile:(NSString *)filename {
-	dlog(SQLITE3_DEBUG, @"dbfile: %@", filename);
-	self->_resultCode = sqlite3_open([filename UTF8String], &self->_sqlite3);
+- (bool)openFile:(NSString *)filename {
+    dlog(SQLITE3_DEBUG, @"dbfile: %@", filename);
+    self->_resultCode = sqlite3_open([filename UTF8String], &self->_sqlite3);
+    return self->_resultCode == SQLITE_OK;
 }
 // UTF-8
-- (void)openFile:(NSString *)filename flags:(int)flags vfs:(const char *)zVfs {
-	self->_resultCode = sqlite3_open_v2([filename UTF8String], &self->_sqlite3, flags, zVfs);
+- (bool)openFile:(NSString *)filename flags:(int)flags vfs:(const char *)zVfs {
+    self->_resultCode = sqlite3_open_v2([filename UTF8String], &self->_sqlite3, flags, zVfs);
+    return self->_resultCode == SQLITE_OK;
 }
 
 - (void)close {
-	sqlite3_close(self->_sqlite3);
-	self->_sqlite3 = nil;
+    sqlite3_close(self->_sqlite3);
+    self->_sqlite3 = nil;
 }
 
-- (void)executeQuery:(NSString*)sql {
-    if (self->_errorMessage && *self->_errorMessage) {
-		sqlite3_free((void *)self->_errorMessage);
-		self->_errorMessage = nil;
-	}
-	self->_resultCode = sqlite3_exec(self->_sqlite3, [sql UTF8String], NULL, NULL, &self->_errorMessage);
+- (bool)executeQuery:(NSString*)sql {
+    [self _freeErrorMessage];
+    self->_resultCode = sqlite3_exec(self->_sqlite3, [sql UTF8String], NULL, NULL, (char **)&self->_errorMessage);
+    return self->_resultCode == SQLITE_OK || self->_resultCode == SQLITE_DONE || self->_resultCode ==SQLITE_ROW;
 }
 
 - (SLCursor*)cursorByQuery:(NSString*)sql {
-	dlog(SQLITE3_DEBUG, @"sql: %@", sql);
-	if (self->_errorMessage) {
-		sqlite3_free((void *)self->_errorMessage);
-		self->_errorMessage = nil;
-	}
-	SLCursor* cursor = [[SLCursor alloc] initWithDatabase:self sql:sql errorMessage:&self->_errorMessage];
-	self->_resultCode = cursor.resultCode;
-	return [cursor autorelease];
+    dlog(SQLITE3_DEBUG, @"sql: %@", sql);
+    [self _freeErrorMessage];
+    SLCursor* cursor = [[SLCursor alloc] initWithDatabase:self sql:sql errorMessage:&self->_errorMessage];
+    self->_resultCode = cursor.resultCode;
+    return [cursor autorelease];
 }
 
 - (SLCursor *)cursorByFormat:(NSString *)format, ... {
-	va_list args;
-	va_start(args, format);
-	SLCursor *cursor = [self cursorByQuery:[[[NSString alloc] initWithFormat:format arguments:args] autorelease]];
-	va_end(args);
-	return cursor;
+    va_list args;
+    va_start(args, format);
+    SLCursor *cursor = [self cursorByQuery:[[[NSString alloc] initWithFormat:format arguments:args] autorelease]];
+    va_end(args);
+    return cursor;
 }
 
 #pragma mark -
 #pragma mark sqlite3 constants
 
 + (int)versionNumber {
-	return SQLITE_VERSION_NUMBER;
+    return SQLITE_VERSION_NUMBER;
 }
 
 + (int)libraryVersionNumber {
-	return sqlite3_libversion_number();
+    return sqlite3_libversion_number();
 }
 
 @end
@@ -215,11 +239,11 @@
 @implementation SLDatabase (SLSQL)
 
 - (SLCursor*)cursorBySQL:(SLSQL *)sql {
-	return [self cursorByQuery:sql.SQL];
+    return [self cursorByQuery:sql.SQL];
 }
 
 - (void)executeSQL:(SLSQL *)sql {
-	[self executeQuery:sql.SQL];
+    [self executeQuery:sql.SQL];
 }
 
 @end

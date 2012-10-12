@@ -20,7 +20,7 @@
 #import <Foundation/Foundation.h>
 
 @interface SLSQL : NSObject {
-	NSMutableString *_SQL; 
+    NSMutableString *_SQL; 
 }
 
 @property(readonly) NSString *SQL;
