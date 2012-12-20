@@ -231,3 +231,12 @@
 }
 
 @end
+
+
+@implementation SLDatabase (SLSQL)
+
+- (void)executeSQL:(SLSQL *)sql {
+    [self executeQuery:sql.SQL];
+}
+
+@end

@@ -8,7 +8,6 @@
 
 #import "Sqlite3Tests.h"
 
-#import "SQL.h"
 
 @implementation Sqlite3Tests
 
@@ -39,53 +38,6 @@
     }
     
     return db;
-}
-
-- (void)testSelectRow
-{
-    SLDatabase *db = [self aDatabase];
-    NSString *query = @"select * from `test` order by `field1` limit 1";
-    SLCursor *cursor = [db cursorByQuery:query];
-    STAssertEquals(SQLITE_ROW, db.resultCode, @"query: %@ result: %@", query, db.errorMessage);
-    
-    STAssertEquals((NSInteger)0, [cursor integerValueAtColumnIndex:0], @"");
-}
-
-- (void)testSelectRows
-{
-    SLDatabase *db = [self aDatabase];
-    NSString *query = @"select * from `test` order by `field1`";
-    SLCursor *cursor = [db cursorByQuery:query];
-
-    NSInteger count = 0;
-    while (![cursor isEndOfCursor]) {
-        STAssertEquals(SQLITE_ROW, db.resultCode, @"query: %@ result: %@", query, db.errorMessage);
-        NSInteger value = [cursor integerValueAtColumnIndex:0];
-        STAssertEquals(value, count, @"");
-        [cursor next];
-        count += 1;
-    }
-}
-
-- (void)testUpdateRow
-{
-    SLDatabase *db = [self aDatabase];
-    NSString *query = @"select * from `test` where `rowid` = 3";
-    SLCursor *cursor = [db cursorByQuery:query];
-    STAssertEquals(SQLITE_ROW, db.resultCode, @"query: %@ result: %@", query, db.errorMessage);
-
-    NSInteger f1 = [cursor integerValueAtColumnIndex:0];
-    STAssertEquals((NSInteger)2, f1, @"");
-
-    query =  [NSString stringWithFormat:@"update `test` set `field1` = 1000 where `field1` = %d", f1];
-    [db executeQuery:query];
-    STAssertEquals(SQLITE_OK, db.resultCode, @"query: %@ result: %@", query, db.errorMessage);
-
-    query = @"select * from `test` where `rowid` = 3";
-    cursor = [db cursorByQuery:query];
-    STAssertEquals(SQLITE_ROW, db.resultCode, @"query: %@ result: %@", query, db.errorMessage);
-
-    STAssertEquals((NSInteger)1000, [cursor integerValueAtColumnIndex:0], @"");
 }
 
 @end

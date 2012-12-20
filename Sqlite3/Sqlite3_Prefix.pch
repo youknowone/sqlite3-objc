@@ -3,3 +3,7 @@
 //
 
 #import <Availability.h>
+#import <cdebug/debug.h>
+#import <Foundation/Foundation.h>
+
+#define SQLITE3_DEBUG FALSE

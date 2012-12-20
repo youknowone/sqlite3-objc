@@ -17,7 +17,7 @@
  **
  */
 
-#import <Foundation/Foundation.h>
+#import <Sqlite3/Database.h>
 
 @interface SLSQL : NSObject {
     NSMutableString *_SQL; 
@@ -65,3 +65,8 @@
 
 @end
 
+@interface SLDatabase (SLSQL)
+
+- (void)executeSQL:(SLSQL *)sql;
+
+@end
