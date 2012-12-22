@@ -26,7 +26,8 @@
         [db executeQuery:insert];
         STAssertEquals(SQLITE_OK, db.resultCode, @"insert error query: %@ / result:%@", insert, db.errorMessage);
     }
-    
+
+    STAssertNotNil(db, @"");
     return db;
 }
 
@@ -54,6 +55,7 @@
         [cursor next];
         count += 1;
     }
+    STAssertEquals(count, (NSInteger)20, @"");
 }
 
 - (void)testUpdateRow

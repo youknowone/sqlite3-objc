@@ -45,6 +45,8 @@ typedef void(* SLStatementBindDestructor)(void*);
     } statementFlags;
 }
 
+@property(nonatomic, readonly) int resultCode;
+
 /*!
  *  @brief Minimal initializer.
  */
@@ -185,3 +187,4 @@ typedef void(* SLStatementBindDestructor)(void*);
 - (NSArray *)allRows; // use enumerator protocol for enumeration
 
 @end
+
