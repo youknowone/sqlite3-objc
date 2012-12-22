@@ -103,6 +103,7 @@
 - (SLCursor*)cursorByQuery:(NSString*)sql {
     dlog(SQLITE3_DEBUG, @"sql: %@", sql);
     SLCursor* cursor = [[SLCursor alloc] initWithDatabase:self sql:sql errorMessage:&self->_errorMessage];
+    self->_resultCode = cursor.resultCode;
     return [cursor autorelease];
 }
 

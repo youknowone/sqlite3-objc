@@ -8,7 +8,7 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-#import <Sqlite3/Sqlite3.h>
+#import <Sqlite3/Sqlite.h>
 
 @interface Sqlite3Tests : SenTestCase 
 

@@ -63,7 +63,7 @@
     self = [super init];
     if (self != nil) {
         [self openMemory:errorPtr];
-        if (*errorPtr == nil) {
+        if (*errorPtr != nil) {
             [self release];
             return nil;
         }
@@ -75,7 +75,7 @@
     self = [super init];
     if (self != nil) {
         [self openFile:filename error:errorPtr];
-        if (*errorPtr == nil) {
+        if (*errorPtr != nil) {
             [self release];
             return nil;
         }

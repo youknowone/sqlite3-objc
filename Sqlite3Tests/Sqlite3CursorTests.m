@@ -77,6 +77,4 @@
     STAssertEquals((NSInteger)1000, [cursor integerValueAtColumnIndex:0], @"");
 }
 
-
-
 @end
