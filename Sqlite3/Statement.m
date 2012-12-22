@@ -48,9 +48,9 @@
     }
     self = [super init];
     if (self != nil) {
-        self->_sqlite3 = nil;
+        self->_sqlite3 = sqlite3;
     }
-    return nil;
+    return self;
     
 drop:
     [self release];
@@ -111,7 +111,8 @@ drop:
 }
 
 - (void)prepareQuery:(NSString *)query error:(NSError **)errorPtr {
-    self->_resultCode = sqlite3_prepare_v2(self->_sqlite3, query.UTF8String, (int)query.length, &self->_stmt, NULL);
+    const char *sql = query.UTF8String;
+    self->_resultCode = sqlite3_prepare_v2(self->_sqlite3, sql, -1, &self->_stmt, NULL);
     if (![self _handleResult:errorPtr]) {
         self->statementFlags.freeWhenDone = YES;
     }
@@ -119,6 +120,7 @@ drop:
 
 - (void)step:(NSError **)errorPtr {
     self->_resultCode = sqlite3_step(self->_stmt);
+    [self _handleResult:errorPtr];
 }
 
 - (void)reset:(NSError **)errorPtr {
@@ -199,7 +201,7 @@ drop:
     int type = sqlite3_column_type(self->_stmt, (int)index);
     switch (type) {
         case SQLITE_NULL:
-            return nil;
+            return [NSNull null];
         case SQLITE_INTEGER:
             return [NSNumber numberWithInteger:[self integerValueAtColumnIndex:index]];
         case SQLITE_FLOAT:
@@ -309,18 +311,19 @@ drop:
         }
     }
     state->itemsPtr = buffer;
-    
+    if (self->_resultCode == SQLITE_DONE) {
+        [self reset:&error];
+        return 0;
+    }
+
     NSUInteger count = 0;
-    while (self->_resultCode != SQLITE_DONE && count < len) {
+    while (count < len) {
         [self step:&error];
-        if (error) {
+        if (error || self->_resultCode == SQLITE_DONE) {
             break;
         }
         buffer[count] = [self values];
         count += 1;
-    }
-    if (self->_resultCode == SQLITE_DONE) {
-        [self reset:&error];
     }
     return count;
 }

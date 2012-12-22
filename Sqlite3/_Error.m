@@ -13,7 +13,7 @@
 @implementation SLError
 
 - (id)initWithDatabase:(sqlite3 *)db {
-    self = [super initWithDomain:@"sqlite" code:sqlite3_errcode(db) userInfo:@{@"description":[NSString stringWithUTF8String:sqlite3_errmsg(db)]}];
+    self = [super initWithDomain:@"sqlite" code:sqlite3_errcode(db) userInfo:@{@"message":[NSString stringWithUTF8String:sqlite3_errmsg(db)]}];
     return self;
 }
 
