@@ -165,7 +165,7 @@
     va_list args;
     va_start(args, firstSQL);
     NSString *arg = firstSQL;
-    NSMutableString *sql = [NSString stringWithString:arg];
+    NSMutableString *sql = [NSMutableString stringWithString:arg];
     for ( arg = va_arg(args, NSString*); arg != nil; arg = va_arg(args, NSString*) )
     {
         [sql appendString:@" OR "];
@@ -219,15 +219,15 @@
 }
 
 + (SLSQL *)SQLWithInsertInto:(NSString *)table values:(NSString*)values {
-    return [NSString stringWithFormat:@"INSERT INTO `%@` VALUES (%@)", table, values];
+    return [[[SLSQL alloc] initWithFormat:@"INSERT INTO `%@` VALUES (%@)", table, values] autorelease];
 }
 
 + (SLSQL *)SQLWithInsertInto:(NSString *)table columns:(NSString*)columns values:(NSString*)values {
-    return [NSString stringWithFormat:@"INSERT INTO `%@` (%@) VALUES (%@)", table, columns, values];    
+    return [[[SLSQL alloc] initWithFormat:@"INSERT INTO `%@` (%@) VALUES (%@)", table, columns, values] autorelease];
 }
 
 + (SLSQL *)SQLWithUpdate:(NSString *)table set:(NSString*)setStatements where:(NSString*)condition {
-    return [NSString stringWithFormat:@"UPDATE `%@` SET %@ WHERE %@", table, setStatements, condition];
+    return [[[SLSQL alloc] initWithFormat:@"UPDATE `%@` SET %@ WHERE %@", table, setStatements, condition] autorelease];
 }
 
 @end

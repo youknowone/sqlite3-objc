@@ -6,8 +6,8 @@
 //  Copyright (c) 2012년 youknowone.org. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
-@interface Sqlite3CursorTests : SenTestCase
+@interface Sqlite3CursorTests : XCTestCase
 
 @end

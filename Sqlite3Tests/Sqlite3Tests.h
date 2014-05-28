@@ -6,10 +6,10 @@
 //  Copyright (c) 2012 youknowone.org All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
 #import <Sqlite3/Sqlite.h>
 
-@interface Sqlite3Tests : SenTestCase 
+@interface Sqlite3Tests : XCTestCase 
 
 @end
