@@ -93,7 +93,7 @@ typedef void(* SLStatementBindDestructor)(void*);
 /*!
  *  @brief sqlite3_data_count
  */
-- (NSInteger)rowCount;
+- (NSInteger)rowCount __deprecated; // deprecated due to wrong implementation
 /*!
  *  @brief sqlite3_column_count
  */

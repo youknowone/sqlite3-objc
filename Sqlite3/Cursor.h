@@ -41,7 +41,8 @@
 
 @property(nonatomic, readonly) int resultCode;
 @property(nonatomic, readonly, getter = isEndOfCursor) BOOL endOfCursor;
-@property(nonatomic, readonly) NSInteger rowCount, columnCount;
+@property(nonatomic, readonly) NSInteger rowCount  __deprecated; // deprecated due to wrong implementation
+@property(nonatomic, readonly) NSInteger columnCount;
 
 - (id)initWithDatabase:(SLDatabase *)database sql:(NSString *)sql errorMessage:(const char**)bufferOrNull;
 + (id)cursorWithSqlite3:(SLDatabase *)database sql:(NSString *)sql errorMessage:(const char**)bufferOrNull;
