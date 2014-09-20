@@ -1,6 +1,6 @@
 //
 //  SLDatabase.m
-//  Sqlite3
+//  SQLite
 //
 //  Created by Jeong YunWon on 12. 12. 19..
 //  Copyright (c) 2012 youknowone.org. All rights reserved.
@@ -17,12 +17,11 @@
  **
  */
 
-#import "Database.h"
+#import "SLDatabase.h"
 
-#import "Statement.h"
-#import "_Error.h"
-
-#import "SQL.h"
+#import "SLStatement.h"
+#import "SLError.h"
+#import "SLSQL.h"
 
 #import "debug.h"
 
@@ -207,7 +206,7 @@
         if ([self _handleResult:errorPtr]) {
             break;
         }
-        [stack addObject:[SLStatement statementWithSqlite3:self->_sqlite3 statement:stmt freeWhenDone:YES]];
+        [stack addObject:[SLStatement statementWithSQLite:self->_sqlite3 statement:stmt freeWhenDone:YES]];
     }
     return [NSArray arrayWithArray:stack];
 }

@@ -1,6 +1,6 @@
 //
 //  SLDatabase.h
-//  Sqlite3
+//  SQLite
 //
 //  Created by youknowone on 09. 12. 9..
 //  Copyright 2010 youknowone.org All rights reserved.
@@ -22,8 +22,9 @@
 //    Query is SQL statement as NSString type
 //    SQL is SQL statement as SLSQL type
 
-#import <Sqlite3/Database.h>
-#import <Sqlite3/Statement.h>
+#import <SQLite/SLDatabase.h>
+#import <SQLite/SLStatement.h>
 
-//#import <Sqlite3/Cursor.h>
-//#import <Sqlite3/SQL.h>
+// cursor and SQL is deprecated.
+//#import <SQLite/SLCursor.h>
+//#import <SQLite/SLSQL.h>

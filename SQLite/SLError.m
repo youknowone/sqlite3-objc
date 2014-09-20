@@ -1,14 +1,14 @@
 //
 //  _Error.m
-//  Sqlite3
+//  SQLite
 //
 //  Created by Jeong YunWon on 12. 12. 21..
-//  Copyright (c) 2012년 youknowone.org. All rights reserved.
+//  Copyright (c) 2012 youknowone.org. All rights reserved.
 //
 
 #include <sqlite3.h>
 
-#import "_Error.h"
+#import "SLError.h"
 
 @implementation SLError
 

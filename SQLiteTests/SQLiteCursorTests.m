@@ -1,19 +1,21 @@
 //
-//  Sqlite3CursorTests.m
-//  Sqlite3
+//  SQLiteCursorTests.m
+//  SQLite
 //
 //  Created by Jeong YunWon on 12. 12. 21..
 //  Copyright (c) 2012년 youknowone.org. All rights reserved.
 //
 
-#import "Sqlite3CursorTests.h"
+#import <XCTest/XCTest.h>
 
-#import "Sqlite.h"
+#import <SQLite/SQLite.h>
+#import <SQLite/SLCursor.h>
 
-#import "SQL.h"
-#import "Cursor.h"
+@interface SQLiteCursorTests : XCTestCase
 
-@implementation Sqlite3CursorTests
+@end
+
+@implementation SQLiteCursorTests
 
 - (SLDatabase *)aDatabase {
     SLDatabase *db = [SLDatabase databaseWithMemory];

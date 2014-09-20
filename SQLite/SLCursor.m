@@ -1,6 +1,6 @@
 //
-//  Cursor.m
-//  Sqlite3
+//  SLCursor.m
+//  SQLite
 //
 //  Created by Jeong YunWon on 12. 12. 20..
 //  Copyright (c) 2012 youknowone.org. All rights reserved.
@@ -17,11 +17,11 @@
  **
  */
 
-#import "Cursor.h"
+#import "SLCursor.h"
 
-#import "Database.h"
-#import "Statement.h"
-#import "SQL.h"
+#import "SLDatabase.h"
+#import "SLStatement.h"
+#import "SLSQL.h"
 
 @implementation SLCursor
 
@@ -36,7 +36,7 @@
     return self;
 }
 
-+ (SLCursor *)cursorWithSqlite3:(SLDatabase *)sqlite3 sql:(NSString *)sql errorMessage:(const char**)bufferOrNull {
++ (SLCursor *)cursorWithSQLite:(SLDatabase *)sqlite3 sql:(NSString *)sql errorMessage:(const char**)bufferOrNull {
     return [[[self alloc] initWithDatabase:sqlite3 sql:sql errorMessage:bufferOrNull] autorelease];
 }
 
@@ -100,7 +100,7 @@
 
 @implementation SLDatabase (SLCursor)
 
-- (SLCursor*)cursorByQuery:(NSString*)sql {
+- (SLCursor *)cursorByQuery:(NSString*)sql {
     dlog(SQLITE3_DEBUG, @"sql: %@", sql);
     SLCursor* cursor = [[SLCursor alloc] initWithDatabase:self sql:sql errorMessage:&self->_errorMessage];
     self->_resultCode = cursor.resultCode;
@@ -115,7 +115,7 @@
     return cursor;
 }
 
-- (SLCursor*)cursorBySQL:(SLSQL *)sql {
+- (SLCursor *)cursorBySQL:(SLSQL *)sql {
     return [self cursorByQuery:sql.SQL];
 }
 

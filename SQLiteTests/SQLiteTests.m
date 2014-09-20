@@ -1,15 +1,21 @@
 //
-//  Sqlite3Tests.m
-//  Sqlite3Tests
+//  SQLiteTests.m
+//  SQLiteTests
 //
 //  Created by youknowone on 12. 10. 5..
 //  Copyright (c) 2012 youknowone.org All rights reserved.
 //
 
-#import "Sqlite3Tests.h"
+#import <XCTest/XCTest.h>
+#import <SQLite/SQLite.h>
 
 
-@implementation Sqlite3Tests
+@interface SQLiteTests : XCTestCase
+
+@end
+
+
+@implementation SQLiteTests
 
 - (SLDatabase *)aDatabase {
     SLDatabase *db = [SLDatabase databaseWithMemory];
@@ -34,23 +40,23 @@
     NSString *query = @"select * where x = ?";
     [db prepareQuery:query error:&error];
     XCTAssertNotNil(error, @"");
-    XCTAssertEqual(error.code, (NSInteger)SQLITE_ERROR, @"error %d: %@", error.code, error.description);
+    XCTAssertEqual(error.code, (NSInteger)SQLITE_ERROR, @"error %ld: %@", (long)error.code, error.description);
 
     error = nil;
     query = @"select * from test where field1 = ?";
     SLStatement *statement = [db prepareQuery:query error:&error];
-    XCTAssertNil(error, @"error %d: %@", error.code, error);
+    XCTAssertNil(error, @"error %ld: %@", (long)error.code, error);
     [statement bindIndex:0 integer:0 error:&error];
-    XCTAssertNotNil(error, @"error %d: %@", error.code, error);
+    XCTAssertNotNil(error, @"error %ld: %@", (long)error.code, error);
     XCTAssertEqual(error.code, (NSInteger)SQLITE_RANGE, @"");
     error = nil;
     [statement bindIndex:1 string:@"1" error:&error];
-    XCTAssertNil(error, @"error %d: %@", error.code, error);
+    XCTAssertNil(error, @"error %ld: %@", (long)error.code, error);
     [statement step:&error];
-    XCTAssertNil(error, @"error %d: %@", error.code, error);
+    XCTAssertNil(error, @"error %ld: %@", (long)error.code, error);
     XCTAssertEqual(statement.resultCode, SQLITE_ROW, @"");
     [statement bindIndexNull:1 error:&error];
-    XCTAssertNotNil(error, @"error %d: %@", error.code, error);
+    XCTAssertNotNil(error, @"error %ld: %@", (long)error.code, error);
     XCTAssertEqual(statement.resultCode, SQLITE_MISUSE, @"");
     error = nil;
     [statement reset:&error];
@@ -59,18 +65,18 @@
     error = nil;
     query = @"select * from test where field2 = ?";
     statement = [db prepareQuery:query error:&error];
-    XCTAssertNil(error, @"error %d: %@", error.code, error);
+    XCTAssertNil(error, @"error %ld: %@", (long)error.code, error);
     [statement bindIndex:1 integer:1 error:&error];
-    XCTAssertNil(error, @"error %d: %@", error.code, error);
+    XCTAssertNil(error, @"error %ld: %@", (long)error.code, error);
     [statement step:&error];
-    XCTAssertNil(error, @"error %d: %@", error.code, error);
+    XCTAssertNil(error, @"error %ld: %@", (long)error.code, error);
     XCTAssertEqual(statement.resultCode, SQLITE_DONE, @"");
     [statement reset:&error];
     XCTAssertNil(error, @"");
     [statement bindIndex:1 string:@"field 1" error:&error];
-    XCTAssertNil(error, @"error %d: %@", error.code, error);
+    XCTAssertNil(error, @"error %ld: %@", (long)error.code, error);
     [statement step:&error];
-    XCTAssertNil(error, @"error %d: %@", error.code, error);
+    XCTAssertNil(error, @"error %ld: %@", (long)error.code, error);
     XCTAssertEqual(statement.resultCode, SQLITE_ROW, @"");
 }
 
@@ -135,6 +141,40 @@
     XCTAssertEqual(SQLITE_OK, statement.resultCode, @"query: %@ result: %@", query, db.errorMessage);
 
     XCTAssertEqual((NSInteger)1000, [[statement.firstRow objectForKey:@"field1"] integerValue], @"");
+}
+
+- (void)testExample1 {
+    //#import <SQLite/SQLite.h> // common header
+    SLDatabase *database = [self aDatabase]; // sqlite3 wrapper
+    // suppose some data
+    [database executeQuery:@"UPDATE `test` SET `field1` = 1"]; // no return!
+    NSError *error = nil;
+    NSString *query = @"SELECT * FROM `test` WHERE `rowid` = 1";
+    SLStatement *statement = [database prepareQuery:query error:&error]; // sqlite3_stmt wrapper
+
+    NSDictionary *firstRow = [statement firstRow]; // useful for 'unique' or 'limit 1' query.
+    NSLog(@"first row: %@", firstRow); // by dictionary
+    for (NSDictionary *row in statement) { // useful for enumerate table
+        // each row as dictionary
+        NSLog(@"field1 %@ field2 %@", [row objectForKey:@"field1"], [row objectForKey:@"field2"]);
+    }
+    NSArray *allRows = [statement allRows]; // useful to save result table
+    NSDictionary *aRow = [allRows objectAtIndex:0]; // pick a row etc
+    NSLog(@"a row: %@", aRow);
+}
+
+- (void)testExample2 {
+    SLDatabase *database = [self aDatabase]; // sqlite3 wrapper
+    // suppose some data
+    [database executeQuery:@"UPDATE `test` SET `field1` = 1"]; // no return!
+    NSError *error = nil;
+    NSString *query = @"SELECT * FROM `test` WHERE `field1` = ?";
+    SLStatement *statement = [database prepareQuery:query error:&error]; // sqlite3_stmt wrapper
+    [statement bindIndex:1 integer:0 error:&error]; // sqlite_bind_int
+    [statement step:&error]; // sqlite3_step
+    NSLog(@"integer value: %ld", [statement integerValueAtColumnIndex:1]); // sqlite3_column_int
+    [statement reset:&error]; // sqlite3_reset
+
 }
 
 @end

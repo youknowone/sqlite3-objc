@@ -1,6 +1,6 @@
 //
 //  Statement.m
-//  Sqlite3
+//  SQLite
 //
 //  Created by Jeong YunWon on 12. 12. 19..
 //  Copyright (c) 2012 youknowone.org. All rights reserved.
@@ -17,11 +17,10 @@
  **
  */
 
-#import "Statement.h"
+#import "SLStatement.h"
 
-#import "Database.h"
-
-#import "_Error.h"
+#import "SLDatabase.h"
+#import "SLError.h"
 
 @interface SLStatement ()
 
@@ -42,7 +41,7 @@
     return NO;
 }
 
-- (id)initWithSqlite3:(sqlite3 *)sqlite3 {
+- (id)initWithSQLite:(sqlite3 *)sqlite3 {
     if (sqlite3 == NULL) {
         goto drop;
     }
@@ -57,11 +56,11 @@ drop:
     return nil;
 }
 
-- (id)initWithSqlite3:(sqlite3 *)sqlite3 statement:(sqlite3_stmt *)statement freeWhenDone:(BOOL)flag {
+- (id)initWithSQLite:(sqlite3 *)sqlite3 statement:(sqlite3_stmt *)statement freeWhenDone:(BOOL)flag {
     if (statement == NULL) {
         goto drop;
     }
-    self = [self initWithSqlite3:sqlite3];
+    self = [self initWithSQLite:sqlite3];
     if (self != nil) {
         self->_stmt = statement;
         self->statementFlags.freeWhenDone = flag;
@@ -77,7 +76,7 @@ drop:
     if (database == nil || query == nil) {
         goto drop;
     }
-    self = [self initWithSqlite3:database.sqlite3];
+    self = [self initWithSQLite:database.sqlite3];
     if (self != nil) {
         [self prepareQuery:query error:errorPtr];
         if (self->_stmt == NULL) {
@@ -91,12 +90,12 @@ drop:
     return nil;
 }
 
-+ (id)statementWithSqlite3:(sqlite3 *)sqlite3 {
-    return [[[self alloc] initWithSqlite3:sqlite3] autorelease];
++ (id)statementWithSQLite:(sqlite3 *)sqlite3 {
+    return [[[self alloc] initWithSQLite:sqlite3] autorelease];
 }
 
-+ (id)statementWithSqlite3:(sqlite3 *)sqlite3 statement:(sqlite3_stmt *)statement freeWhenDone:(BOOL)flag {
-    return [[[self alloc] initWithSqlite3:sqlite3 statement:statement freeWhenDone:flag] autorelease];
++ (id)statementWithSQLite:(sqlite3 *)sqlite3 statement:(sqlite3_stmt *)statement freeWhenDone:(BOOL)flag {
+    return [[[self alloc] initWithSQLite:sqlite3 statement:statement freeWhenDone:flag] autorelease];
 }
 
 + (id)statementWithDatabase:(SLDatabase *)database query:(NSString *)query error:(NSError **)errorPtr {
@@ -163,7 +162,8 @@ drop:
 }
 
 - (NSInteger)integerValueAtColumnIndex:(NSInteger)index {
-    return sqlite3_column_int(self->_stmt, (int)index);
+    NSInteger result = sqlite3_column_int(self->_stmt, (int)index);
+    return result;
 }
 
 - (NSData *)dataValueAtColumnIndex:(NSInteger)index {

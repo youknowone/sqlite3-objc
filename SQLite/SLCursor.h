@@ -1,6 +1,6 @@
 //
-//  Cursor.h
-//  Sqlite3
+//  SLCursor.h
+//  SQLite
 //
 //  Created by Jeong YunWon on 12. 12. 20..
 //  Copyright (c) 2012 youknowone.org. All rights reserved.
@@ -29,7 +29,7 @@
 
 #include <sqlite3.h>
 
-#import <Sqlite3/Database.h>
+#import <SQLite/SLDatabase.h>
 
 /*!
  *  @breif Cursor is deprecated. Use Statement for future.
@@ -45,7 +45,7 @@
 @property(nonatomic, readonly) NSInteger columnCount;
 
 - (id)initWithDatabase:(SLDatabase *)database sql:(NSString *)sql errorMessage:(const char**)bufferOrNull;
-+ (id)cursorWithSqlite3:(SLDatabase *)database sql:(NSString *)sql errorMessage:(const char**)bufferOrNull;
++ (id)cursorWithSQLite:(SLDatabase *)database sql:(NSString *)sql errorMessage:(const char**)bufferOrNull;
 
 - (void)reset;
 - (void)next;
@@ -56,11 +56,12 @@
 
 @end
 
+
 @class SLSQL;
 @interface SLDatabase (SLCursor)
 
 - (SLCursor *)cursorByFormat:(NSString *)format, ... NS_FORMAT_FUNCTION(1, 2);
-- (SLCursor*)cursorByQuery:(NSString*)sql;
-- (SLCursor*)cursorBySQL:(SLSQL *)wrapper;
+- (SLCursor *)cursorByQuery:(NSString*)sql;
+- (SLCursor *)cursorBySQL:(SLSQL *)wrapper;
 
 @end

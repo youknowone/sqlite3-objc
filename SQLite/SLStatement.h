@@ -1,6 +1,6 @@
 //
 //  Statement.h
-//  Sqlite3
+//  SQLite
 //
 //  Created by Jeong YunWon on 12. 12. 19..
 //  Copyright (c) 2012 youknowone.org. All rights reserved.
@@ -50,11 +50,11 @@ typedef void(* SLStatementBindDestructor)(void*);
 /*!
  *  @brief Minimal initializer.
  */
-- (id)initWithSqlite3:(sqlite3 *)sqlite3;
+- (id)initWithSQLite:(sqlite3 *)sqlite3;
 /*!
  *  @brief init and import statement
  */
-- (id)initWithSqlite3:(sqlite3 *)sqlite3 statement:(sqlite3_stmt *)statement freeWhenDone:(BOOL)flag;
+- (id)initWithSQLite:(sqlite3 *)sqlite3 statement:(sqlite3_stmt *)statement freeWhenDone:(BOOL)flag;
 /*!
  *  @brief init and prepare query
  */
@@ -63,11 +63,11 @@ typedef void(* SLStatementBindDestructor)(void*);
 /*!
  *  @brief Minimal initializer.
  */
-+ (id)statementWithSqlite3:(sqlite3 *)sqlite3;
++ (id)statementWithSQLite:(sqlite3 *)sqlite3;
 /*!
  *  @brief init and import statement
  */
-+ (id)statementWithSqlite3:(sqlite3 *)sqlite3 statement:(sqlite3_stmt *)statement freeWhenDone:(BOOL)flag;
++ (id)statementWithSQLite:(sqlite3 *)sqlite3 statement:(sqlite3_stmt *)statement freeWhenDone:(BOOL)flag;
 /*!
  *  @brief init and prepare query
  */

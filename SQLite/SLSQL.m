@@ -1,6 +1,6 @@
 //
 //  SLSQL.m
-//  Sqlite3
+//  SQLite
 //
 //  Created by youknowone on 10. 11. 1..
 //  Copyright 2010 youknowone.org All rights reserved.
@@ -17,7 +17,7 @@
  **
  */
 
-#import "SQL.h"
+#import "SLSQL.h"
 
 #if __LP64__ || (TARGET_OS_EMBEDDED && !TARGET_OS_IPHONE) || TARGET_OS_WIN32 || NS_BUILD_32_LIKE_64
     #define NSUIntegerFormat "%lu"
@@ -28,21 +28,21 @@
 @implementation SLSQL
 @synthesize SQL=_SQL;
 
-- (id)init {
+- (instancetype)init {
     if ((self = [super init]) != nil) {
         _SQL = [[NSMutableString alloc] init];
     }
     return self;
 }
 
-- (id)initWithString:(NSString *)string {
+- (instancetype)initWithString:(NSString *)string {
     if ((self = [self init]) != nil) {
         [_SQL appendString:string];
     }
     return self;
 }
 
-- (id)initWithFormat:(NSString *)format, ... {
+- (instancetype)initWithFormat:(NSString *)format, ... {
     if ((self = [self init]) != nil) {
         va_list args;
         va_start(args, format);
@@ -59,7 +59,7 @@
     [super dealloc];
 }
 
-- (NSString *) description {
+- (NSString *)description {
     return _SQL;
 }
 

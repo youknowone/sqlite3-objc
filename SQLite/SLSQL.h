@@ -1,6 +1,6 @@
 //
 //  SLSQL.h
-//  Sqlite3
+//  SQLite
 //
 //  Created by youknowone on 10. 11. 1..
 //  Copyright 2010 youknowone.org All rights reserved.
@@ -17,7 +17,7 @@
  **
  */
 
-#import <Sqlite3/Database.h>
+#import <SQLite/SLDatabase.h>
 
 @interface SLSQL : NSObject {
     NSMutableString *_SQL; 
@@ -35,10 +35,10 @@
 
 @interface SLSQL (SLSQLCreation)
 
-- (id)initWithString:(NSString *)string;
-+ (id)initWithFormat:(NSString *)format, ... NS_FORMAT_FUNCTION(1,2);
-+ (SLSQL *)SQLWithString:(NSString *)string;
-+ (SLSQL *)SQLWithFormat:(NSString *)format, ... NS_FORMAT_FUNCTION(1,2);
+- (instancetype)initWithString:(NSString *)string;
++ (instancetype)initWithFormat:(NSString *)format, ... NS_FORMAT_FUNCTION(1,2);
++ (instancetype)SQLWithString:(NSString *)string;
++ (instancetype)SQLWithFormat:(NSString *)format, ... NS_FORMAT_FUNCTION(1,2);
 
 + (SLSQL *)SQLWithSelect:(NSString *)column from:(NSString *)table where:(NSString *)condition;
 + (SLSQL *)SQLWithDeleteFrom:(NSString *)table where:(NSString*)condition;
