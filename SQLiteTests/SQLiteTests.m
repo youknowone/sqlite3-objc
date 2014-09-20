@@ -91,8 +91,8 @@
 
     NSDictionary *row = [statement firstRow];
 
-    XCTAssertEqual((NSInteger)0, [[row objectForKey:@"field1"] integerValue], @"");
-    XCTAssertEqual((NSInteger)0, [[row objectForKey:@"field2"] integerValue], @"");
+    XCTAssertEqual((NSInteger)0, [row[@"field1"] integerValue], @"");
+    XCTAssertEqual((NSInteger)0, [row[@"field2"] integerValue], @"");
 }
 
 - (void)testSelectRows
@@ -105,7 +105,7 @@
 
     NSInteger count = 0;
     for (NSDictionary *row in statement) {
-        NSInteger value = [[row objectForKey:@"field1"] integerValue];
+        NSInteger value = [row[@"field1"] integerValue];
         XCTAssertEqual(value, count, @"");
         count += 1;
     }
@@ -123,7 +123,7 @@
     XCTAssertEqual(SQLITE_OK, statement.resultCode, @"query: %@ result: %@", query, db.errorMessage);
 
     NSDictionary *row = [statement firstRow];
-    NSInteger f1 = [[row objectForKey:@"field1"] integerValue];
+    NSInteger f1 = [row[@"field1"] integerValue];
     XCTAssertEqual((NSInteger)2, f1, @"");
 
     query =  [NSString stringWithFormat:@"update `test` set `field1` = ? where `field1` = ?"];
@@ -140,7 +140,7 @@
     statement = [db prepareQuery:query error:&error];
     XCTAssertEqual(SQLITE_OK, statement.resultCode, @"query: %@ result: %@", query, db.errorMessage);
 
-    XCTAssertEqual((NSInteger)1000, [[statement.firstRow objectForKey:@"field1"] integerValue], @"");
+    XCTAssertEqual((NSInteger)1000, [(statement.firstRow)[@"field1"] integerValue], @"");
 }
 
 - (void)testExample1 {
@@ -156,10 +156,10 @@
     NSLog(@"first row: %@", firstRow); // by dictionary
     for (NSDictionary *row in statement) { // useful for enumerate table
         // each row as dictionary
-        NSLog(@"field1 %@ field2 %@", [row objectForKey:@"field1"], [row objectForKey:@"field2"]);
+        NSLog(@"field1 %@ field2 %@", row[@"field1"], row[@"field2"]);
     }
     NSArray *allRows = [statement allRows]; // useful to save result table
-    NSDictionary *aRow = [allRows objectAtIndex:0]; // pick a row etc
+    NSDictionary *aRow = allRows[0]; // pick a row etc
     NSLog(@"a row: %@", aRow);
 }
 

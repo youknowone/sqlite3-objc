@@ -36,12 +36,12 @@ typedef bool (^SLExecuteCallback)(int, char**, char**);
 @property(nonatomic, readonly) sqlite3 *sqlite3;
 
 // initializers
-- (id)initWithMemory;
-+ (id)databaseWithMemory;
+- (instancetype)initWithMemory;
++ (instancetype)databaseWithMemory;
 
-- (id)initWithMemory:(NSError **)errorPtr;
-- (id)initWithFile:(NSString*)filename error:(NSError **)errorPtr;
-+ (id)databaseWithFile:(NSString*)filename error:(NSError **)errorPtr;
+- (instancetype)initWithMemory:(NSError **)errorPtr;
+- (instancetype)initWithFile:(NSString*)filename error:(NSError **)errorPtr;
++ (instancetype)databaseWithFile:(NSString*)filename error:(NSError **)errorPtr;
 
 - (id)initWithFile:(NSString*)filename __deprecated;
 + (id)databaseWithFile:(NSString*)filename __deprecated;
@@ -89,8 +89,8 @@ typedef bool (^SLExecuteCallback)(int, char**, char**);
 @property(nonatomic, copy) NSString *table;
 @property(nonatomic, readonly) NSMutableDictionary *data;
 
-- (id)initWithTable:(NSString *)table;
-- (id)initWithTable:(NSString *)table data:(NSDictionary *)data;
+- (instancetype)initWithTable:(NSString *)table;
+- (instancetype)initWithTable:(NSString *)table data:(NSDictionary *)data;
 
 - (void)setData:(id)data forKey:(id)key;
 

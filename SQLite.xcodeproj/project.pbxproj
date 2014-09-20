@@ -8,12 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		387381C0161E93FE0000F484 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 383764D713373154007072FD /* Foundation.framework */; };
-		387381D5161E9A2E0000F484 /* SLSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 3837651813373240007072FD /* SLSQL.m */; };
 		387381E4161EE6B90000F484 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 387381E2161EE6B90000F484 /* LICENSE */; };
 		387381E5161EE6B90000F484 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 387381E3161EE6B90000F484 /* README.md */; };
 		38738234161EFABC0000F484 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38660A24161AD86000C5CE06 /* Cocoa.framework */; };
 		38738240161EFABC0000F484 /* SQLiteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3873823F161EFABC0000F484 /* SQLiteTests.m */; };
-		38738248161EFD300000F484 /* SLSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 3837651813373240007072FD /* SLSQL.m */; };
 		3873824A161EFD4F0000F484 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 38738249161EFD4F0000F484 /* libsqlite3.dylib */; };
 		38B4AE4A16836FE500ED35BC /* SLError.h in Headers */ = {isa = PBXBuildFile; fileRef = 38B4AE4816836FE500ED35BC /* SLError.h */; };
 		38B4AE4B16836FE500ED35BC /* SLError.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B4AE4916836FE500ED35BC /* SLError.m */; };
@@ -22,7 +20,6 @@
 		38B4AE571684632F00ED35BC /* SQLiteCursorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B4AE561684632F00ED35BC /* SQLiteCursorTests.m */; };
 		38B4AE58168463DA00ED35BC /* Sqlite.framework in Resources */ = {isa = PBXBuildFile; fileRef = 38C7A9721495181800381910 /* Sqlite.framework */; };
 		38C7A9AC14951C3300381910 /* SLSQL.h in Headers */ = {isa = PBXBuildFile; fileRef = 3837651713373240007072FD /* SLSQL.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		38C7A9AD14951C3300381910 /* SLSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 3837651813373240007072FD /* SLSQL.m */; };
 		38C7A9AE14951C3300381910 /* SQLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 3837651913373240007072FD /* SQLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		38C7A9D114951D2C00381910 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38C7A9D014951D2C00381910 /* Foundation.framework */; };
 		38C7A9D314951D4700381910 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 38C7A9D214951D4700381910 /* libiconv.dylib */; };
@@ -36,6 +33,8 @@
 		38E48E1216822A6500BD4F6D /* SLCursor.h in Headers */ = {isa = PBXBuildFile; fileRef = 38E48E1016822A6500BD4F6D /* SLCursor.h */; };
 		38E48E1316822A6500BD4F6D /* SLCursor.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E48E1116822A6500BD4F6D /* SLCursor.m */; };
 		38E48E1416822A6500BD4F6D /* SLCursor.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E48E1116822A6500BD4F6D /* SLCursor.m */; };
+		38FD946719CDE6BB0092433C /* SLSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 3837651813373240007072FD /* SLSQL.m */; };
+		38FD946819CDE6BB0092433C /* SLSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 3837651813373240007072FD /* SLSQL.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -378,7 +377,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				387381D5161E9A2E0000F484 /* SLSQL.m in Sources */,
+				38FD946719CDE6BB0092433C /* SLSQL.m in Sources */,
 				38E48E09168201DF00BD4F6D /* SLStatement.m in Sources */,
 				38E48E0F1682021500BD4F6D /* SLDatabase.m in Sources */,
 				38E48E1416822A6500BD4F6D /* SLCursor.m in Sources */,
@@ -391,7 +390,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				38738240161EFABC0000F484 /* SQLiteTests.m in Sources */,
-				38738248161EFD300000F484 /* SLSQL.m in Sources */,
 				38B4AE571684632F00ED35BC /* SQLiteCursorTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -400,7 +398,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				38C7A9AD14951C3300381910 /* SLSQL.m in Sources */,
+				38FD946819CDE6BB0092433C /* SLSQL.m in Sources */,
 				38E48E08168201DF00BD4F6D /* SLStatement.m in Sources */,
 				38E48E0E1682021500BD4F6D /* SLDatabase.m in Sources */,
 				38E48E1316822A6500BD4F6D /* SLCursor.m in Sources */,
@@ -497,6 +495,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -529,6 +528,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COMBINE_HIDPI_IMAGES = YES;

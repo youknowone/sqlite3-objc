@@ -226,7 +226,7 @@ drop:
         NSString *value = [self valueAtColumnIndex:i];
         [dictionary setObject:value forKey:name];
     }
-    return dictionary;
+    return [dictionary copy];
 }
 
 - (NSArray *)valueArray {
@@ -236,7 +236,7 @@ drop:
         NSString *value = [self valueAtColumnIndex:i];
         [array addObject:value];
     }
-    return array;
+    return [array copy];
 }
 
 #pragma mark - bind
@@ -350,7 +350,7 @@ drop:
     for (id row in self) {
         [array addObject:row];
     }
-    return array;
+    return [array copy];
 }
 
 @end

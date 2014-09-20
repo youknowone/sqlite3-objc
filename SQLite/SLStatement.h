@@ -50,28 +50,28 @@ typedef void(* SLStatementBindDestructor)(void*);
 /*!
  *  @brief Minimal initializer.
  */
-- (id)initWithSQLite:(sqlite3 *)sqlite3;
+- (instancetype)initWithSQLite:(sqlite3 *)sqlite3;
 /*!
  *  @brief init and import statement
  */
-- (id)initWithSQLite:(sqlite3 *)sqlite3 statement:(sqlite3_stmt *)statement freeWhenDone:(BOOL)flag;
+- (instancetype)initWithSQLite:(sqlite3 *)sqlite3 statement:(sqlite3_stmt *)statement freeWhenDone:(BOOL)flag;
 /*!
  *  @brief init and prepare query
  */
-- (id)initWithDatabase:(SLDatabase *)database query:(NSString *)query error:(NSError **)errorPtr;
+- (instancetype)initWithDatabase:(SLDatabase *)database query:(NSString *)query error:(NSError **)errorPtr;
 
 /*!
  *  @brief Minimal initializer.
  */
-+ (id)statementWithSQLite:(sqlite3 *)sqlite3;
++ (instancetype)statementWithSQLite:(sqlite3 *)sqlite3;
 /*!
  *  @brief init and import statement
  */
-+ (id)statementWithSQLite:(sqlite3 *)sqlite3 statement:(sqlite3_stmt *)statement freeWhenDone:(BOOL)flag;
++ (instancetype)statementWithSQLite:(sqlite3 *)sqlite3 statement:(sqlite3_stmt *)statement freeWhenDone:(BOOL)flag;
 /*!
  *  @brief init and prepare query
  */
-+ (id)statementWithDatabase:(SLDatabase *)database query:(NSString *)query error:(NSError **)errorPtr;
++ (instancetype)statementWithDatabase:(SLDatabase *)database query:(NSString *)query error:(NSError **)errorPtr;
 
 /*!
  *  @name low level api
@@ -97,7 +97,7 @@ typedef void(* SLStatementBindDestructor)(void*);
 /*!
  *  @brief sqlite3_column_count
  */
-- (NSInteger)columnCount;
+@property (nonatomic, readonly) NSInteger columnCount;
 /*!
  *  @brief sqlite3_column_name
  */
@@ -144,11 +144,11 @@ typedef void(* SLStatementBindDestructor)(void*);
 /*!
  *  @brief Dictionary formed row
  */
-- (NSDictionary *)values;
+@property (nonatomic, readonly, copy) NSDictionary *values;
 /*
  *  @brief Array formed row
  */
-- (NSArray *)valueArray;
+@property (nonatomic, readonly, copy) NSArray *valueArray;
 
 /*
  *  @name binds
@@ -167,7 +167,7 @@ typedef void(* SLStatementBindDestructor)(void*);
 - (void)bindIndex:(int)index blob:(const void *)blob length:(NSUInteger)bytes desctuctor:(SLStatementBindDestructor)destructor error:(NSError **)errorPtr;
 - (void)bindIndex:(int)index data:(NSData *)data error:(NSError **)errorPtr;
 
-- (NSInteger)numberOfBindParameters;
+@property (nonatomic, readonly) NSInteger numberOfBindParameters;
 - (void)removeBinding:(NSError **)errorPtr;
 
 @end
@@ -180,11 +180,11 @@ typedef void(* SLStatementBindDestructor)(void*);
 /*!
  *  @brief values for first row
  */
-- (NSDictionary *)firstRow;
+@property (nonatomic, readonly, copy) NSDictionary *firstRow;
 /*!
  *  @brief values for all rows. Use enumeration protocol for enumerator.
  */
-- (NSArray *)allRows; // use enumerator protocol for enumeration
+@property (nonatomic, readonly, copy) NSArray *allRows; // use enumerator protocol for enumeration
 
 @end
 

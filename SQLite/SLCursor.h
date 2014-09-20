@@ -44,8 +44,8 @@
 @property(nonatomic, readonly) NSInteger rowCount  __deprecated; // deprecated due to wrong implementation
 @property(nonatomic, readonly) NSInteger columnCount;
 
-- (id)initWithDatabase:(SLDatabase *)database sql:(NSString *)sql errorMessage:(const char**)bufferOrNull;
-+ (id)cursorWithSQLite:(SLDatabase *)database sql:(NSString *)sql errorMessage:(const char**)bufferOrNull;
+- (instancetype)initWithDatabase:(SLDatabase *)database sql:(NSString *)sql errorMessage:(const char**)bufferOrNull;
++ (instancetype)cursorWithSQLite:(SLDatabase *)database sql:(NSString *)sql errorMessage:(const char**)bufferOrNull;
 
 - (void)reset;
 - (void)next;

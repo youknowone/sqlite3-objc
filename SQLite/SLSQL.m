@@ -98,9 +98,9 @@
 + (SLSQL *)SQLWithFormat:(NSString *)format, ... {
     va_list args;
     va_start(args, format);
-    self = [[self alloc] initWithString:[[[NSString alloc] initWithFormat:format arguments:args] autorelease]];
+    id SQL = [[self alloc] initWithString:[[[NSString alloc] initWithFormat:format arguments:args] autorelease]];
     va_end(args);
-    return [self autorelease];
+    return [SQL autorelease];
 }
 
 + (NSString *)alias:(NSString *)SQL as:(NSString *)alias {
@@ -177,10 +177,10 @@
 
 + (NSString *)customListSeparatedBy:(NSString *)separator withArray:(NSArray *)array {
     if ( nil == array || 0 == [array count] ) return nil;
-    NSMutableString *sql = [NSMutableString stringWithString:[array objectAtIndex:0]];
+    NSMutableString *sql = [NSMutableString stringWithString:array[0]];
     NSUInteger index = 1;
     while ( [array count] > index ) {
-        [sql appendFormat:@"%@ %@", separator, [array objectAtIndex:index]];
+        [sql appendFormat:@"%@ %@", separator, array[index]];
         index++;
     }
     return sql;
@@ -188,10 +188,10 @@
 
 + (NSString *)commaListWithArray:(NSArray *)array {
     if ( nil == array || 0 == [array count] ) return nil;
-    NSMutableString *sql = [NSMutableString stringWithString:[array objectAtIndex:0]];
+    NSMutableString *sql = [NSMutableString stringWithString:array[0]];
     NSUInteger index = 1;
     while ( [array count] > index ) {
-        [sql appendFormat:@", `%@`", [array objectAtIndex:index]];
+        [sql appendFormat:@", `%@`", array[index]];
         index++;
     }
     return sql;

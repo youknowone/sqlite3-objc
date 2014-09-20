@@ -10,4 +10,5 @@ Pod::Spec.new do |s|
   s.header_dir   = 'SQLite'
   s.library   = 'sqlite3'
   s.dependency 'cdebug'
+  s.requires_arc = false
 end
